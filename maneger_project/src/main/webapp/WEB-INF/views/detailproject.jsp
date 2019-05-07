@@ -2,8 +2,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-
-<c:set var="contextPath" value="${pageContext.request.contextPath}" />
+<c:set var="baseURL" value="${pageContext.request.localName}" />
 <!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
@@ -11,7 +10,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 -->
 <html>
 <head>
- <base href="http://localhost:8080/" target="_blank">
+<base href="http://localhost:8080/" target="_blank">
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>AdminLTE 2 | Starter</title>
@@ -34,7 +33,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         apply the skin class to the body tag so the changes take effect.
   -->
 <link rel="stylesheet" href="dist/css/skins/skin-blue.min.css">
-<link href="../static/images/logo.png" href="@{/images/logo.png}"
+<link href="../static/images/logo.png" th:href="@{/images/logo.png}"
 	rel="shortcut icon" />
 <link
 	href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
@@ -42,7 +41,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
 	crossorigin="anonymous" />
 <!-- Custom style -->
-<link href="../static/css/style.css" href="@{/css/style.css}"
+<link href="../static/css/style.css" th:href="@{/css/style.css}"
 	rel="stylesheet" />
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
@@ -250,7 +249,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 							<span>Project Manager</span> <i
 							class="fa fa-angle-left pull-right"></i></a>
 						<ul class="treeview-menu">
-							<li><a href="/project">Project Manager</a></li>
+							<li><a href="#">Project Manager</a></li>
 							<li><a href="#">Task Manager</a></li>
 						</ul></li>
 				</ul>
@@ -274,10 +273,71 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 			<!-- Main content -->
 			<section class="content"></section>
-			
-			<img alt="this is logo" src="https://di3xp7dfi3cq.cloudfront.net/pub/media/magefan_blog/i/t/it_project_management.jpeg" style="width: 100%;margin-top : -20%;">
-			<!-- /.content -->
+			<div class="container" style="margin-top: -20%">
+				<div class="box box-info">
+					<div style="float: left">
+						<img alt="" src="dist/img/project.jpg" style="width: 30%">
+					</div>
+					<div class="box-header with-border">
+						<h1>Detail Infomation Of Project</h1>
+					</div>
+					<!-- /.box-header -->
+					<!-- form start -->
+					<form:form class="form-horizontal" modelAttribute="project"
+						var="project">
+						<div class="box-body">
+							<div class="col-md-6 row">
+								<div class="col-md-12">
+									<label>Project Name : <c:out value=" ${project.projectName}"></c:out></label>
+								</div>
+								<div class="col-md-12">
+									<label>Create Date : <c:out value=" ${project.createDate}"></c:out></label>
+								</div>
+								<div class="col-md-12">
+									<label>Start Date : <c:out value=" ${project.startDate}"></c:out></label>
+								</div>
+								<div class="col-md-12">
+									<label>DeadLine : <c:out value=" ${project.deadlineDate}"></c:out></label>
+								</div>
+								<div class="col-md-12">
+									<label>Finish Date : <c:out value=" ${project.finishDate}"></c:out></label>
+								</div>
+								<div class="col-md-12">
+									<label>Project State :<c:out
+											value=" ${project.projectState}" ></c:out> %</label>
+								</div>
+								<div class="col-md-12">
+									<label>Project output : <c:out
+											value=" ${project.projectOutput}"></c:out></label>
+								</div>
+							
+							</div>
+
+							<div class="col-md-6 row">
+								<div class="col-md-12">
+									<label>Amount Staff of Project : <c:out value=" ${project.staffProject.size()}"></c:out></label>
+								</div>
+								<div class="col-md-12">
+									<label>Amout Task of Project : <c:out value=" ${project.task.size()}"></c:out></label>
+								</div>
+								<div class="col-md-12 row">
+									<div class="col-md-3">
+										<label>Discription : </label>
+									</div>
+									<div class="col-md-6">
+										<textarea readonly="true"><c:out
+												value=" ${project.discription}"></c:out></textarea>
+									</div>
+
+								</div>
+							
+							</div>
+					</form:form>
+				</div>
+			</div>
 		</div>
+
+
 		<!-- /.content-wrapper -->
 
 		<!-- Main Footer -->

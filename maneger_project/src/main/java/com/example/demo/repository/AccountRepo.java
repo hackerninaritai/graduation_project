@@ -7,5 +7,5 @@ import com.example.demo.entity.Account;
 
 @Repository
 public interface AccountRepo extends JpaRepository<Account, Integer>{
-	Account findAccountByEmail(String email); 
+	Account findAccountByAccountName(String accountName); 
 }

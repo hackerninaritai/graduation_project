@@ -2,23 +2,23 @@
 package com.example.demo.entity;
 
 /*
- * To change this license header, choose License Headers in Project Properties. To change this
- * template file, choose Tools | Templates and open the template in the editor.
- */
-/*
- * To change this license header, choose License Headers in Project Properties. To change this
- * template file, choose Tools | Templates and open the template in the editor.
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 
 /*
- * To change this license header, choose License Headers in Project Properties. To change this
- * template file, choose Tools | Templates and open the template in the editor.
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 
-import java.util.Set;
+import java.io.Serializable;
+import java.util.Collection;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,189 +26,159 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 /**
  *
- * @author USER
+ * @author lthung
  */
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
-@Table(name = "staff", schema = "rangdong")
-@Getter
-@Setter
-public class Staff {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "id", nullable = false)
-	@NotNull
-	private Integer id;
-	@Column(name = "firstname", nullable = false)
-	@NotNull
-	private String firstname;
-	@Column(name = "fullname")
-	@NotNull
-	private String fullname;
-	@Column(name = "email")
-	@Email
-	@NotNull
-	private String email;
-	@Column(name = "sex")
-	@NotNull
-	private String sex;
-	@Column(name = "address")
-	@NotNull
-	private String address;
-	@NotNull
-	@Column(name = "skill")
-	private String skill;
-	@NotNull
-	@Column(name = "position")
-	private String position;
-	@Column(name = "telephone")
-	@NotNull
-	private String telephone;
-	@JoinTable(name = "staff_task", joinColumns = {
-			@JoinColumn(name = "staffid", referencedColumnName = "id") }, inverseJoinColumns = {
-					@JoinColumn(name = "taskid", referencedColumnName = "id") })
-	@ManyToMany
-	private Set<Task> taskSet;
-
-	@JoinTable(name = "staff_department", joinColumns = {
-			@JoinColumn(name = "staffid", referencedColumnName = "id") }, inverseJoinColumns = {
-					@JoinColumn(name = "departmentid", referencedColumnName = "iddepartment") })
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	private Department departmentSet;
-
-	@OneToOne(mappedBy = "staffSet")
-	private Account accountSet;
-
-	public Staff(@NotNull Integer id, @NotNull String firstname, @NotNull String fullname, @Email @NotNull String email,
-			@NotNull String sex, @NotNull String address, @NotNull String skill, @NotNull String position,
-			@NotNull String telephone, Set<Task> taskSet, Department departmentSet, Account accountSet) {
-		super();
-		this.id = id;
-		this.firstname = firstname;
-		this.fullname = fullname;
-		this.email = email;
-		this.sex = sex;
-		this.address = address;
-		this.skill = skill;
-		this.position = position;
-		this.telephone = telephone;
-		this.taskSet = taskSet;
-		this.departmentSet = departmentSet;
-		this.accountSet = accountSet;
+@Table(name = "staff")
+@NamedQueries({
+    @NamedQuery(name = "Staff.findAll", query = "SELECT s FROM Staff s"),
+    @NamedQuery(name = "Staff.findByStaffId", query = "SELECT s FROM Staff s WHERE s.staffId = :staffId"),
+    @NamedQuery(name = "Staff.findByFirstName", query = "SELECT s FROM Staff s WHERE s.firstName = :firstName"),
+    @NamedQuery(name = "Staff.findByLastName", query = "SELECT s FROM Staff s WHERE s.lastName = :lastName"),
+    @NamedQuery(name = "Staff.findByFullName", query = "SELECT s FROM Staff s WHERE s.fullName = :fullName"),
+    @NamedQuery(name = "Staff.findByGender", query = "SELECT s FROM Staff s WHERE s.gender = :gender"),
+    @NamedQuery(name = "Staff.findByEmail", query = "SELECT s FROM Staff s WHERE s.email = :email"),
+    @NamedQuery(name = "Staff.findByPossition", query = "SELECT s FROM Staff s WHERE s.possition = :possition"),
+    @NamedQuery(name = "Staff.findBySkill", query = "SELECT s FROM Staff s WHERE s.skill = :skill"),
+    @NamedQuery(name = "Staff.findByTelephone", query = "SELECT s FROM Staff s WHERE s.telephone = :telephone"),
+    @NamedQuery(name = "Staff.findByDiscription", query = "SELECT s FROM Staff s WHERE s.discription = :discription")})
+public class Staff implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "staff_id")
+    private Integer staffId;
+    @Basic(optional = false)
+    @Column(name = "first_name")
+    private String firstName;
+    @Basic(optional = false)
+    @Column(name = "last_name")
+    private String lastName;
+    @Basic(optional = false)
+    @Column(name = "full_name")
+    private String fullName;
+    @Column(name = "gender")
+    private String gender;
+    @Basic(optional = false)
+    @Column(name = "email")
+    private String email;
+    @Basic(optional = false)
+    @Column(name = "possition")
+    private String possition;
+    @Basic(optional = false)
+    @Column(name = "skill")
+    private String skill;
+    @Basic(optional = false)
+    @Column(name = "telephone")
+    private String telephone;
+    @Column(name = "discription")
+    private String discription;
+    @ManyToMany
+    @JoinTable(name = "staff_project",
+        joinColumns = @JoinColumn(name = "staff_id"),
+        inverseJoinColumns = @JoinColumn(name = "project_id"))
+    private Collection<Project> staffProject;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "staffId")
+	private Collection<Task> task;
+    @JoinColumn(name = "department_id", referencedColumnName = "department_id")
+    @ManyToOne(optional = false)
+    private Department departmentId;
+    @JoinColumn(name = "account_id", referencedColumnName = "account_id")
+    @ManyToOne(optional = false)
+    private Account accountId;
+    
+	public Integer getStaffId() {
+		return staffId;
 	}
-
-	public Staff() {
-		super();
+	public void setStaffId(Integer staffId) {
+		this.staffId = staffId;
 	}
-
-	public Integer getId() {
-		return id;
+	public String getFirstName() {
+		return firstName;
 	}
-
-	public void setId(Integer id) {
-		this.id = id;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
-
-	public String getFirstname() {
-		return firstname;
+	public String getLastName() {
+		return lastName;
 	}
-
-	public void setFirstname(String firstname) {
-		this.firstname = firstname;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
-
-	public String getFullname() {
-		return fullname;
+	public String getFullName() {
+		return fullName;
 	}
-
-	public void setFullname(String fullname) {
-		this.fullname = fullname;
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
-
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
 	public String getEmail() {
 		return email;
 	}
-
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
-	public String getSex() {
-		return sex;
+	public String getPossition() {
+		return possition;
 	}
-
-	public void setSex(String sex) {
-		this.sex = sex;
+	public void setPossition(String possition) {
+		this.possition = possition;
 	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
 	public String getSkill() {
 		return skill;
 	}
-
 	public void setSkill(String skill) {
 		this.skill = skill;
 	}
-
-	public String getPosition() {
-		return position;
-	}
-
-	public void setPosition(String position) {
-		this.position = position;
-	}
-
 	public String getTelephone() {
 		return telephone;
 	}
-
 	public void setTelephone(String telephone) {
 		this.telephone = telephone;
 	}
-
-	public Set<Task> getTaskSet() {
-		return taskSet;
+	public String getDiscription() {
+		return discription;
+	}
+	public void setDiscription(String discription) {
+		this.discription = discription;
+	}
+	public Collection<Project> getStaffProject() {
+		return staffProject;
+	}
+	public void setStaffProject(Collection<Project> staffProject) {
+		this.staffProject = staffProject;
+	}
+	public Collection<Task> getTask() {
+		return task;
+	}
+	public void setTask(Collection<Task> task) {
+		this.task = task;
+	}
+	public Department getDepartmentId() {
+		return departmentId;
+	}
+	public void setDepartmentId(Department departmentId) {
+		this.departmentId = departmentId;
+	}
+	public Account getAccountId() {
+		return accountId;
+	}
+	public void setAccountId(Account accountId) {
+		this.accountId = accountId;
 	}
 
-	public void setTaskSet(Set<Task> taskSet) {
-		this.taskSet = taskSet;
-	}
-
-	public Department getDepartmentSet() {
-		return departmentSet;
-	}
-
-	public void setDepartmentSet(Department departmentSet) {
-		this.departmentSet = departmentSet;
-	}
-
-	public Account getAccountSet() {
-		return accountSet;
-	}
-
-	public void setAccountSet(Account accountSet) {
-		this.accountSet = accountSet;
-	}
-
+   
 }

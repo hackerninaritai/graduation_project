@@ -1,18 +1,23 @@
 package com.example.demo.controller;
 
+import java.util.List;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.entity.Staff;
+import com.example.demo.service.AccountService;
+import com.example.demo.service.DepartmentService;
 import com.example.demo.service.StaffService;
 
 @Controller
@@ -20,51 +25,11 @@ public class StaffController {
 	@Autowired
 	private StaffService staffService;
 
-	// @Autowired
-	// private SercurityService sercurityService;
+	@Autowired
+	private DepartmentService departmentService;
 
-//  @Autowired
-//  private StaffValidator staffValidator;
-
-	// @GetMapping("/register")
-	// public String registration(Model model) {
-	// model.addAttribute("staffForm", new Staff());
-	// return "register";
-	// }
-	//
-	// @PostMapping("/register")
-	// public String registration(@ModelAttribute("staffForm") Staff staffForm,
-	// BindingResult
-	// bindingResult) {
-	// staffValidator.validate(staffForm, bindingResult);
-	//
-	// if (bindingResult.hasErrors()) {
-	// return "register";
-	// }
-	//
-	// staffService.save(staffForm);
-	//
-	//// sercurityService.autoLogin(staffForm.getUsename(),
-	// staffForm.getPassword());
-	//
-	// return "redirect:/welcome";
-	// }
-	//
-	// @GetMapping("/login")
-	// public String login(Model model, String error, String logout) {
-	// if (error != null)
-	// model.addAttribute("error", "Your username and password is invalid.");
-	//
-	// if (logout != null)
-	// model.addAttribute("message", "You have been logged out successfully.");
-	//
-	// return "login";
-	// }
-//
-	@GetMapping({ "/", "/welcome" })
-	public String welcome(Model model) {
-		return "welcome";
-	}
+	@Autowired
+	private AccountService accountService;
 
 	@GetMapping("/staff")
 	public String list(Model model) {
@@ -74,19 +39,26 @@ public class StaffController {
 
 	@GetMapping("/staff/add")
 	public String add(Model model) {
+//		staff.setDepartmentId(departmentId);
 		model.addAttribute("staff", new Staff());
+		model.addAttribute("departments", departmentService.findAllDepartment());
+		model.addAttribute("accounts", accountService.findAllAccount());
 		return "staffform";
 	}
 
 	@GetMapping("/staff/{id}/edit")
 	public String edit(@PathVariable("id") int id, Model model) {
 		model.addAttribute("staff", staffService.findOne(id));
+		model.addAttribute("departments", departmentService.findAllDepartment());
+		model.addAttribute("accounts", accountService.findAllAccount());
 		return "staffform";
 	}
 
-	@PostMapping("/staff/save")
+	@RequestMapping(value = "/staff/save", method = RequestMethod.POST)
 	public ModelAndView save(@ModelAttribute("staff") Staff staff) {
+
 		staffService.save(staff);
+
 		return new ModelAndView("redirect:/staff");
 	}
 
@@ -98,12 +70,30 @@ public class StaffController {
 	}
 
 	@GetMapping("/staff/search")
-	public String search(@RequestParam("term") String term, Model model) {
-		if (StringUtils.isEmpty(term)) {
-			return "redirect:/staff";
-		}
+	public String search(@RequestParam("term") String term) {
+		List<Staff> list = staffService.search(term);
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("staffs", list);
+		return "redirect:/staff";
+	}
 
-		model.addAttribute("staff", staffService.search(term));
-		return "liststaff";
+	@RequestMapping(value = "/staff/detail/{id}", method = RequestMethod.GET)
+	public ModelAndView detail(@PathVariable int id) {
+		
+		ModelAndView modelAndView = new ModelAndView();
+
+		modelAndView.addObject("staff", staffService.findOne(id));
+	
+		modelAndView.setViewName("detailstaff");
+		return modelAndView;
+	}
+	
+	@GetMapping(value="/staff/{id}/task")
+	public ModelAndView getTask(@PathVariable int id) {
+		ModelAndView model = new ModelAndView();
+		model.addObject("tasks",staffService.getListTask(id));
+		model.setViewName("listtaskofstaff");
+		return model;
+		
 	}
 }

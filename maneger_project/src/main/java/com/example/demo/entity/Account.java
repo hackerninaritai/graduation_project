@@ -6,124 +6,134 @@ package com.example.demo.entity;
  * and open the template in the editor.
  */
 
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 import java.io.Serializable;
-import java.util.Set;
+import java.util.Collection;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-
-import org.hibernate.validator.constraints.Length;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  *
- * @author hung
+ * @author lthung
  */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
-@Table(name = "account", schema = "rangdong")
+@Table(name = "account")
+@NamedQueries({
+    @NamedQuery(name = "Account.findAll", query = "SELECT a FROM Account a"),
+    @NamedQuery(name = "Account.findByAccountId", query = "SELECT a FROM Account a WHERE a.accountId = :accountId"),
+    @NamedQuery(name = "Account.findByAccountName", query = "SELECT a FROM Account a WHERE a.accountName = :accountName"),
+    @NamedQuery(name = "Account.findByPassword", query = "SELECT a FROM Account a WHERE a.password = :password")})
 public class Account implements Serializable {
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "account_id")
+    private Integer accountId;
+    @Basic(optional = false)
+    @Column(name = "account_name")
+    private String accountName;
+    @Basic(optional = false)
+    @Column(name = "password")
+    private String password;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "accountId")
+    private Collection<Staff> staffCollection;
+    @JoinColumn(name = "role_id", referencedColumnName = "role_id")
+    @ManyToOne
+    private Role roleId;
 
-	private static final long serialVersionUID = 1L;
-	@Id
-	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
-	@Column(name = "email")
-	@Email(message = "*hãy cung cấp email đúng định dạng")
-	@NotEmpty(message = "*hãy nhập email")
-	private String email;
-	@Column(name = "password")
-	 @Length(min = 5, message = "*mật khẩu phải lớn hơn 5 ký tự")
-    @NotEmpty(message = "*Hãy nhập mật khẩu")
-	private String password;
-	@Column(name = "ENABLED")
-	private boolean enabled;
-	@JoinTable(name = "account_role", joinColumns = {
-			@JoinColumn(name = "account_id", referencedColumnName = "id") }, inverseJoinColumns = {
-					@JoinColumn(name = "role_id", referencedColumnName = "id") })
-	@ManyToMany
-	private Set<Role> roleSet;
-	@JoinTable(name = "account_staff", joinColumns = {
-			@JoinColumn(name = "account_id", referencedColumnName = "id") }, inverseJoinColumns = {
-					@JoinColumn(name = "staff_id", referencedColumnName = "id") })
-	@OneToOne
-	private Staff staffSet;
+    public Account() {
+    }
 
-	public Account(Integer id, String email, String password, boolean enabled, Set<Role> roleSet, Staff staffSet) {
-		super();
-		this.id = id;
-		this.email = email;
-		this.password = password;
-		this.enabled = enabled;
-		this.roleSet = roleSet;
-		this.staffSet = staffSet;
-	}
+    public Account(Integer accountId) {
+        this.accountId = accountId;
+    }
 
-	public Account() {
-		super();
-	}
+    public Account(Integer accountId, String accountName, String password) {
+        this.accountId = accountId;
+        this.accountName = accountName;
+        this.password = password;
+    }
 
-	public Integer getId() {
-		return id;
-	}
+    public Integer getAccountId() {
+        return accountId;
+    }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public void setAccountId(Integer accountId) {
+        this.accountId = accountId;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getAccountName() {
+        return accountName;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public boolean isEnabled() {
-		return enabled;
-	}
+    public Collection<Staff> getStaffCollection() {
+        return staffCollection;
+    }
 
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
+    public void setStaffCollection(Collection<Staff> staffCollection) {
+        this.staffCollection = staffCollection;
+    }
 
-	public Set<Role> getRoleSet() {
-		return roleSet;
-	}
+    public Role getRoleId() {
+        return roleId;
+    }
 
-	public void setRoleSet(Set<Role> roleSet) {
-		this.roleSet = roleSet;
-	}
+    public void setRoleId(Role roleId) {
+        this.roleId = roleId;
+    }
 
-	public Staff getStaffSet() {
-		return staffSet;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (accountId != null ? accountId.hashCode() : 0);
+        return hash;
+    }
 
-	public void setStaffSet(Staff staffSet) {
-		this.staffSet = staffSet;
-	}
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Account)) {
+            return false;
+        }
+        Account other = (Account) object;
+        if ((this.accountId == null && other.accountId != null) || (this.accountId != null && !this.accountId.equals(other.accountId))) {
+            return false;
+        }
+        return true;
+    }
 
+    @Override
+    public String toString() {
+        return "gdfgdfgdfg.Account[ accountId=" + accountId + " ]";
+    }
+    
 }

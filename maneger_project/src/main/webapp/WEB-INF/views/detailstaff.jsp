@@ -2,8 +2,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-
-<c:set var="contextPath" value="${pageContext.request.contextPath}" />
+<c:set var="baseURL" value="${pageContext.request.localName}" />
 <!DOCTYPE html>
 <!--
 This is a starter template page. Use this page to start your new project from
@@ -11,7 +10,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 -->
 <html>
 <head>
- <base href="http://localhost:8080/" target="_blank">
+<base href="http://localhost:8080/" target="_blank">
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>AdminLTE 2 | Starter</title>
@@ -34,7 +33,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         apply the skin class to the body tag so the changes take effect.
   -->
 <link rel="stylesheet" href="dist/css/skins/skin-blue.min.css">
-<link href="../static/images/logo.png" href="@{/images/logo.png}"
+<link href="../static/images/logo.png" th:href="@{/images/logo.png}"
 	rel="shortcut icon" />
 <link
 	href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
@@ -42,7 +41,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
 	crossorigin="anonymous" />
 <!-- Custom style -->
-<link href="../static/css/style.css" href="@{/css/style.css}"
+<link href="../static/css/style.css" th:href="@{/css/style.css}"
 	rel="stylesheet" />
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
@@ -246,7 +245,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					<li class="active"><spring:url value="/staff" var="listURL" />
 						<a class="" href="${listURL}" role="list"><i
 							class="fa fa-link"></i> <span>Staff Manager</span></a></li>
-					<li class="treeview"><a href="#"><i class="fa fa-link"></i>
+					<li class="treeview"><a href="/project"><i class="fa fa-link"></i>
 							<span>Project Manager</span> <i
 							class="fa fa-angle-left pull-right"></i></a>
 						<ul class="treeview-menu">
@@ -274,93 +273,165 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 			<!-- Main content -->
 			<section class="content"></section>
-			
-			<img alt="this is logo" src="https://di3xp7dfi3cq.cloudfront.net/pub/media/magefan_blog/i/t/it_project_management.jpeg" style="width: 100%;margin-top : -20%;">
-			<!-- /.content -->
-		</div>
-		<!-- /.content-wrapper -->
-
-		<!-- Main Footer -->
-		<footer class="main-footer">
-			<!-- To the right -->
-			<div class="pull-right hidden-xs">GVHD: Nguyễn Thanh Bình</div>
-			<!-- Default to the left -->
-			<strong>Team Graduation Project <a href="#">Rạng Đông
-					Company</a>
-			</strong> Hùng - Thành - Đại.
-		</footer>
-
-		<!-- Control Sidebar -->
-		<aside class="control-sidebar control-sidebar-dark">
-			<!-- Create the tabs -->
-			<ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-				<li class="active"><a href="#control-sidebar-home-tab"
-					data-toggle="tab"><i class="fa fa-home"></i></a></li>
-				<li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i
-						class="fa fa-gears"></i></a></li>
-			</ul>
-			<!-- Tab panes -->
-			<div class="tab-content">
-				<!-- Home tab content -->
-				<div class="tab-pane active" id="control-sidebar-home-tab">
-					<h3 class="control-sidebar-heading">Recent Activity</h3>
-					<ul class="control-sidebar-menu">
-						<li><a href="javascript::;"> <i
-								class="menu-icon fa fa-birthday-cake bg-red"></i>
-
-								<div class="menu-info">
-									<h4 class="control-sidebar-subheading">Langdon's Birthday</h4>
-
-									<p>Will be 23 on April 24th</p>
+			<div class="container" style="margin-top: -15%">
+				<div class="box box-info">
+					<div  style="float: left">
+						<img alt="" src="dist/img/21.png" style="width: 30%">
+					</div>
+					<div class="box-header with-border">
+						<h1 >Detail Infomation Of Staff</h1>
+					</div>
+					<!-- /.box-header -->
+					<!-- form start -->
+					<form:form class="form-horizontal" modelAttribute="staff"
+						var="staff">
+						<div class="box-body">
+							<div class="col-md-6 row">
+								<div class="col-md-12">
+									<label >Fist Name: <c:out value=" ${staff.firstName}"></c:out></label>
 								</div>
-						</a></li>
-					</ul>
-					<!-- /.control-sidebar-menu -->
-
-					<h3 class="control-sidebar-heading">Tasks Progress</h3>
-					<ul class="control-sidebar-menu">
-						<li><a href="javascript::;">
-								<h4 class="control-sidebar-subheading">
-									Custom Template Design <span
-										class="label label-danger pull-right">70%</span>
-								</h4>
-
-								<div class="progress progress-xxs">
-									<div class="progress-bar progress-bar-danger"
-										style="width: 70%"></div>
+								<div class="col-md-12">
+									<label>Last Name: <c:out value=" ${staff.lastName}"></c:out></label>
 								</div>
-						</a></li>
-					</ul>
-					<!-- /.control-sidebar-menu -->
+								<div class="col-md-12">
+									<label>Full Name: <c:out value=" ${staff.fullName}"></c:out></label>
+								</div>
+								<div class="col-md-12">
+									<label>Email: <c:out value=" ${staff.email}"></c:out></label>
+								</div>
+								<div class="col-md-12">
+									<label>Skill: <c:out value=" ${staff.skill}"></c:out></label>
+								</div>
+								<div class="col-md-12">
+									<label>Account ID:<c:out value=" ${staff.accountId.accountId}"></c:out></label>
+								</div>
+								<div class="col-md-12">
+									<label>Department ID: <c:out value=" ${staff.departmentId.departmentId}"></c:out></label>
+								</div>
+								<div class="col-md-12">
+									<label>Role ID: <c:out value=" ${staff.accountId.roleId.roleId}"></c:out></label>
+								</div>
+							</div>
 
+							<div class="col-md-6 row">
+								<div class="col-md-12">
+									<label>Possition: <c:out value=" ${staff.possition}"></c:out></label>
+								</div>
+								<div class="col-md-12">
+									<label>Telephone: <c:out value=" ${staff.telephone}"></c:out></label>
+								</div>
+								<div class="col-md-12 row">
+									<div class="col-md-3">
+										<label>Discription: </label>
+									</div>
+									<div class="col-md-6">
+										<textarea readonly="true"><c:out value=" ${staff.discription}"></c:out></textarea>
+									</div>
+
+								</div>
+								<div class="col-md-12">
+									<label>Account name: <c:out value=" ${staff.accountId.accountName}"></c:out></label>
+								</div>
+								<div class="col-md-12">
+									<label>Department name: <c:out value=" ${staff.departmentId.departmentName}"></c:out> </label>
+								</div>
+								<div class="col-md-12">
+									<label>RoleName: <c:out value=" ${staff.accountId.roleId.roleName}"></c:out></label>
+								</div>
+							</div>
+					</form:form>
 				</div>
-				<!-- /.tab-pane -->
-				<!-- Stats tab content -->
-				<div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab
-					Content</div>
-				<!-- /.tab-pane -->
-				<!-- Settings tab content -->
-				<div class="tab-pane" id="control-sidebar-settings-tab">
-					<form method="post">
-						<h3 class="control-sidebar-heading">General Settings</h3>
-
-						<div class="form-group">
-							<label class="control-sidebar-subheading"> Report panel
-								usage <input type="checkbox" class="pull-right" checked>
-							</label>
-
-							<p>Some information about this general settings option</p>
-						</div>
-						<!-- /.form-group -->
-					</form>
-				</div>
-				<!-- /.tab-pane -->
 			</div>
-		</aside>
-		<!-- /.control-sidebar -->
-		<!-- Add the sidebar's background. This div must be placed
+			<!-- /.box-body -->
+
+			<!-- /.box-footer -->
+
+		</div>
+	</div>
+
+
+	<!-- /.content-wrapper -->
+
+	<!-- Main Footer -->
+	<footer class="main-footer">
+		<!-- To the right -->
+		<div class="pull-right hidden-xs">GVHD: Nguyễn Thanh Bình</div>
+		<!-- Default to the left -->
+		<strong>Team Graduation Project <a href="#">Rạng Đông
+				Company</a>
+		</strong> Hùng - Thành - Đại.
+	</footer>
+
+	<!-- Control Sidebar -->
+	<aside class="control-sidebar control-sidebar-dark">
+		<!-- Create the tabs -->
+		<ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+			<li class="active"><a href="#control-sidebar-home-tab"
+				data-toggle="tab"><i class="fa fa-home"></i></a></li>
+			<li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i
+					class="fa fa-gears"></i></a></li>
+		</ul>
+		<!-- Tab panes -->
+		<div class="tab-content">
+			<!-- Home tab content -->
+			<div class="tab-pane active" id="control-sidebar-home-tab">
+				<h3 class="control-sidebar-heading">Recent Activity</h3>
+				<ul class="control-sidebar-menu">
+					<li><a href="javascript::;"> <i
+							class="menu-icon fa fa-birthday-cake bg-red"></i>
+
+							<div class="menu-info">
+								<h4 class="control-sidebar-subheading">Langdon's Birthday</h4>
+
+								<p>Will be 23 on April 24th</p>
+							</div>
+					</a></li>
+				</ul>
+				<!-- /.control-sidebar-menu -->
+
+				<h3 class="control-sidebar-heading">Tasks Progress</h3>
+				<ul class="control-sidebar-menu">
+					<li><a href="javascript::;">
+							<h4 class="control-sidebar-subheading">
+								Custom Template Design <span
+									class="label label-danger pull-right">70%</span>
+							</h4>
+
+							<div class="progress progress-xxs">
+								<div class="progress-bar progress-bar-danger" style="width: 70%"></div>
+							</div>
+					</a></li>
+				</ul>
+				<!-- /.control-sidebar-menu -->
+
+			</div>
+			<!-- /.tab-pane -->
+			<!-- Stats tab content -->
+			<div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab
+				Content</div>
+			<!-- /.tab-pane -->
+			<!-- Settings tab content -->
+			<div class="tab-pane" id="control-sidebar-settings-tab">
+				<form method="post">
+					<h3 class="control-sidebar-heading">General Settings</h3>
+
+					<div class="form-group">
+						<label class="control-sidebar-subheading"> Report panel
+							usage <input type="checkbox" class="pull-right" checked>
+						</label>
+
+						<p>Some information about this general settings option</p>
+					</div>
+					<!-- /.form-group -->
+				</form>
+			</div>
+			<!-- /.tab-pane -->
+		</div>
+	</aside>
+	<!-- /.control-sidebar -->
+	<!-- Add the sidebar's background. This div must be placed
        immediately after the control sidebar -->
-		<div class="control-sidebar-bg"></div>
+	<div class="control-sidebar-bg"></div>
 	</div>
 	<!-- ./wrapper -->
 

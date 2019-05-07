@@ -25,25 +25,26 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-6 col-md-offset-3">
-				<form autocomplete="off" action="#" action="/registration"
-					th:object="${account}" method="post" class="form-horizontal"
-					role="form">
+				<form:form modelAttribute="account" method="post" action="${registration}"
+					cssClass="form" >
 					<h2>Registration Form</h2>
 
 					<div class="form-group">
 						<div class="col-sm-9">
-							<input type="text" th:field="*{email}" placeholder="Email"
-								class="form-control" /> <label
-								th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
-								class="validation-message"></label>
+							<form:input type="text" path="accountName" placeholder="email"
+								class="form-control" />
 						</div>
-					</div>
+					</div><br>
 					<div class="form-group">
 						<div class="col-sm-9">
 							<form:input type="password" path="password"
 								placeholder="Password" class="form-control" />
-							<label th:if="${#fields.hasErrors('password')}"
-								th:errors="*{password}" class="validation-message"></label>
+						</div>
+					</div><br>
+						<div class="form-group">
+						<div class="col-sm-9">
+							<form:input type="role" path="roleId"
+								placeholder="role" class="form-control" />
 						</div>
 					</div>
 
@@ -53,12 +54,7 @@
 								User</button>
 						</div>
 					</div>
-
-					<h2>
-						<span class="text-success" th:utext="${successMessage}"></span>
-					</h2>
-
-				</form>
+				</form:form>
 			</div>
 		</div>
 	</div>

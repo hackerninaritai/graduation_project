@@ -1,17 +1,14 @@
 package com.example.demo.service.impl;
 
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.demo.entity.Staff;
-import com.example.demo.repository.RoleRepo;
+import com.example.demo.entity.Task;
 import com.example.demo.repository.StaffRepo;
 import com.example.demo.service.StaffService;
-
-import antlr.collections.impl.LList;
 
 @Service
 public class StaffServiceImpl implements StaffService {
@@ -33,7 +30,7 @@ public class StaffServiceImpl implements StaffService {
 
 	@Override
 	public List<Staff> findByUsername(String firstname) {
-		return staffRepository.findByFirstname(firstname);
+		return null;
 	}
 
 	@Override
@@ -50,7 +47,7 @@ public class StaffServiceImpl implements StaffService {
 			result = listStaff;
 		} else {
 			for (Staff staff : listStaff) {
-				if(staff.getFirstname().toLowerCase().contains(term.toLowerCase())) {
+				if (staff.getFirstName().toLowerCase().contains(term.toLowerCase())) {
 					result.add(staff);
 				}
 			}
@@ -77,6 +74,12 @@ public class StaffServiceImpl implements StaffService {
 	public String getDerpatmentName(int id) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<Task> getListTask(int staffId) {
+		
+		return staffRepository.fetchStaffP(staffId);
 	}
 
 }

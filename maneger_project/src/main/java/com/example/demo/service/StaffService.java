@@ -3,6 +3,7 @@ package com.example.demo.service;
 import java.util.List;
 
 import com.example.demo.entity.Staff;
+import com.example.demo.entity.Task;
 
 public interface StaffService {
 	List<Staff> findByUsername(String username);
@@ -18,5 +19,7 @@ public interface StaffService {
 	void delete(int id);
 	
 	String getDerpatmentName(int id);
+	
+	List<Task> getListTask(int staffId);
 
 }

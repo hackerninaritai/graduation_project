@@ -1,8 +1,10 @@
 package com.example.demo.service.impl;
 
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
+import org.springframework.aop.framework.adapter.ThrowsAdviceInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,8 +15,11 @@ import com.example.demo.repository.AccountRepo;
 import com.example.demo.repository.RoleRepo;
 import com.example.demo.service.AccountService;
 
+import net.bytebuddy.implementation.bytecode.Throw;
+
 @Service
 public class AccountServiceImpl implements AccountService {
+
 	@Autowired
 	private AccountRepo accountRepo;
 
@@ -25,18 +30,32 @@ public class AccountServiceImpl implements AccountService {
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@Override
-	public Account findAccountByEmail(String email) {
-		// TODO Auto-generated method stub
-		return accountRepo.findAccountByEmail(email);
+	public Account findAccountByAccountName(String accountName) {
+
+		return accountRepo.findAccountByAccountName(accountName);
 	}
 
 	@Override
 	public Account saveAccount(Account account) {
 		account.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
-		account.setEnabled(true);
-		Role accountRole = roleRepo.findByName("ADMIN");
-		account.setRoleSet(new HashSet<Role>(Arrays.asList(accountRole)));
+		Role accountRole = roleRepo.findByRoleName("ADMIN");
+		account.setRoleId(accountRole);
 		return accountRepo.save(account);
+	}
+
+	@Override
+	public List<Account> findAllAccount() {
+		return accountRepo.findAll();
+	}
+
+	@Override
+	public boolean deleteAccount(int idAccount) {
+		Account account = accountRepo.getOne(idAccount);
+		if (account.equals(null) || account == null) {
+			return false;
+		}
+		accountRepo.deleteById(idAccount);
+		return true;
 	}
 
 }

@@ -11,10 +11,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 -->
 <html>
 <head>
- <base href="http://localhost:8080/" target="_blank">
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>AdminLTE 2 | Starter</title>
+<title>Show List Staff</title>
 <!-- Tell the browser to be responsive to screen width -->
 <meta
 	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
@@ -28,13 +27,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
 <!-- Theme style -->
+<link rel="stylesheet"
+	href="../../plugins/datatables/dataTables.bootstrap.css">
 <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
 <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
         page. However, you can choose any other skin. Make sure you
         apply the skin class to the body tag so the changes take effect.
   -->
 <link rel="stylesheet" href="dist/css/skins/skin-blue.min.css">
-<link href="../static/images/logo.png" href="@{/images/logo.png}"
+<link href="../static/images/logo.png" th:href="@{/images/logo.png}"
 	rel="shortcut icon" />
 <link
 	href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
@@ -42,8 +43,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
 	crossorigin="anonymous" />
 <!-- Custom style -->
-<link href="../static/css/style.css" href="@{/css/style.css}"
-	rel="stylesheet" />
+<link href="css/style.css" th:href="@{/css/style.css}" rel="stylesheet" />
 <body class="hold-transition skin-blue sidebar-mini">
 	<div class="wrapper">
 
@@ -51,7 +51,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 		<header class="main-header">
 
 			<!-- Logo -->
-			<a href="#" class="logo"> <!-- mini logo for sidebar mini 50x50 pixels -->
+			<a href="/welcome" class="logo"> <!-- mini logo for sidebar mini 50x50 pixels -->
 				<span class="logo-mini"><b>R</b>Đ</span> <!-- logo for regular state and mobile devices -->
 				<span class="logo-lg"><b>Rạng Đông</b> Company</span>
 			</a>
@@ -190,10 +190,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 										<a href="#" class="btn btn-default btn-flat">Profile</a>
 									</div>
 									<div class="pull-right">
-										<form action="/logout" method="get">
-											<button class="btn btn-md btn-danger btn-block"
-												name="registration" type="Submit">Logout</button>
-										</form>
+										<a href="/logout" class="btn btn-default btn-flat">Sign
+											out</a>
 									</div>
 								</li>
 							</ul>
@@ -241,7 +239,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				<ul class="sidebar-menu">
 					<li class="header">HEADER</li>
 					<!-- Optionally, you can add icons to the links -->
-					<li class="active"><a href="/account" th:href="@{/account}"><i
+					<li class="active"><a href="#" th:href="@{/staff}"><i
 							class="fa fa-link"></i> <span>Account Manager</span></a></li>
 					<li class="active"><spring:url value="/staff" var="listURL" />
 						<a class="" href="${listURL}" role="list"><i
@@ -250,7 +248,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 							<span>Project Manager</span> <i
 							class="fa fa-angle-left pull-right"></i></a>
 						<ul class="treeview-menu">
-							<li><a href="/project">Project Manager</a></li>
+							<li><a href="#">Project Manager</a></li>
 							<li><a href="#">Task Manager</a></li>
 						</ul></li>
 				</ul>
@@ -264,21 +262,66 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			<!-- Content Header (Page header) -->
 			<section class="content-header">
 				<h1>
-					Page Header <small>Optional description</small>
+					Data Tables <small>advanced tables</small>
 				</h1>
 				<ol class="breadcrumb">
-					<li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
-					<li class="active">Here</li>
+					<li><a href="/welcome"><i class="fa fa-dashboard"></i>
+							Home</a></li>
+					<li><a href="/staff">Tables</a></li>
+					<li class="active">Data tables</li>
 				</ol>
 			</section>
+			<section class="content">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="box">
+							<div class="box-header">
+								<h3 class="box-title">Data Table Account</h3>
+							</div>
+							<div class="box-header">
+								<spring:url value="/account/add" var="addURL" />
+								<a class="btn btn-primary" href="${addURL}" role="button"><i class="glyphicon glyphicon-plus"></i> Create
+									Account</a>
+							</div>
+							<!-- /.box-header -->
+							<div class="box-body">
+								<table id="example1" class="table table-bordered table-striped">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th>Account Name</th>
+											<th>Password</th>
+											<th>Role</th>
+											<th>Action</th>
+										</tr>
+									</thead>
+									<tbody>
+										<c:forEach items="${accounts }" var="account" varStatus="s">
+											<tr>
+												<td><c:out value="${s.index + 1}" /></td>
+												<td><c:out value="${account.accountName}" /></td>
+												<td><c:out value="${account.password}" /></td>
+												<td><c:out value="${account.roleId.roleName}" /></td>
+												<td><spring:url
+														value="/account/${account.accountId}/edit" var="editURL" />
+													<a href="${editURL}"><i
+														class="glyphicon glyphicon-pencil"></i></a> <spring:url
+														value="/account/delete/${account.accountId}"
+														var="deleteURL" /> <a href="${deleteURL}"
+													onclick="return confirm('Bạn chắc chắn xoá ACCOUNT có tên : ${account.accountName} ?');"><i
+														class="glyphicon glyphicon-trash"></i> </a>
+											</tr>
+										</c:forEach>
+									</tbody>
+								</table>
 
-			<!-- Main content -->
-			<section class="content"></section>
-			
-			<img alt="this is logo" src="https://di3xp7dfi3cq.cloudfront.net/pub/media/magefan_blog/i/t/it_project_management.jpeg" style="width: 100%;margin-top : -20%;">
-			<!-- /.content -->
+							</div>
+							<!-- /.box-body -->
+						</div>
+					</div>
+				</div>
+			</section>
 		</div>
-		<!-- /.content-wrapper -->
 
 		<!-- Main Footer -->
 		<footer class="main-footer">
@@ -372,6 +415,34 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	<script src="bootstrap/js/bootstrap.min.js"></script>
 	<!-- AdminLTE App -->
 	<script src="dist/js/app.min.js"></script>
+	<script src="../../plugins/jQuery/jQuery-2.2.0.min.js"></script>
+	<!-- Bootstrap 3.3.6 -->
+	<script src="../../bootstrap/js/bootstrap.min.js"></script>
+	<!-- DataTables -->
+	<script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+	<script src="../../plugins/datatables/dataTables.bootstrap.min.js"></script>
+	<!-- SlimScroll -->
+	<script src="../../plugins/slimScroll/jquery.slimscroll.min.js"></script>
+	<!-- FastClick -->
+	<script src="../../plugins/fastclick/fastclick.js"></script>
+	<!-- AdminLTE App -->
+	<script src="../../dist/js/app.min.js"></script>
+	<!-- AdminLTE for demo purposes -->
+	<script src="../../dist/js/demo.js"></script>
+	<!-- page script -->
+	<script>
+		$(function() {
+			$("#example1").DataTable();
+			$('#example2').DataTable({
+				"paging" : true,
+				"lengthChange" : false,
+				"searching" : false,
+				"ordering" : true,
+				"info" : true,
+				"autoWidth" : false
+			});
+		});
+	</script>
 
 	<!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the
