@@ -230,6 +230,7 @@
                             <c:if test="${empty task.taskId}">
                                 <form:input type="hidden" path="taskState" value="0"></form:input>
                             </c:if>
+                            <form:input type="hidden" path="taskIdparent" value="${task.taskIdparent}"></form:input>
                             <div class="form-group">
                                 <label class="control-label col-sm-2 requiredField">
                                     Task Ouput <span class="asteriskField"> * </span>

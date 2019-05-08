@@ -56,4 +56,18 @@ public class TaskController {
         model.addAttribute("staffs", staffs);
         return "taskform";
     }
+
+    @GetMapping(value = "/task/{id}/addsubtask")
+    public String addSubTask(@PathVariable("id") int id, Model model) {
+        Task parentTask = taskService.findById(id);
+        Task task = new Task();
+        task.setProjectId(parentTask.getProjectId());
+        task.setTaskIdparent(parentTask.getTaskId());
+        model.addAttribute("task", task);
+        List<Staff> listStaff = projectService.getListStaffOfProject(task.getProjectId().getProjectId());
+        Map<Integer, String> staffs = new HashMap<>();
+        listStaff.forEach(item -> staffs.put(item.getStaffId(), item.getFullName()));
+        model.addAttribute("staffs", staffs);
+        return "taskform";
+    }
 }
